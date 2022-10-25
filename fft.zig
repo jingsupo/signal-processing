@@ -7,9 +7,7 @@ pub fn fft(real: []f64, imag: []f64, truncate: bool) ![2][]f64 {
     const allocator = std.heap.page_allocator;
 
     const data_length = real.len;
-    if (data_length <= 1) {
-        return [2][]f64{ try allocator.dupe(f64, real), try allocator.dupe(f64, imag) };
-    }
+    if (data_length <= 1) return [2][]f64{ try allocator.dupe(f64, real), try allocator.dupe(f64, imag) };
 
     const n = if (truncate) previous_pow2(@intCast(isize, data_length)) else next_pow2(@intCast(isize, data_length));
 
@@ -39,9 +37,7 @@ pub fn ifft(real: []f64, imag: []f64, truncate: bool) ![2][]f64 {
     const allocator = std.heap.page_allocator;
 
     const data_length = real.len;
-    if (data_length <= 1) {
-        return [2][]f64{ try allocator.dupe(f64, real), try allocator.dupe(f64, imag) };
-    }
+    if (data_length <= 1) return [2][]f64{ try allocator.dupe(f64, real), try allocator.dupe(f64, imag) };
 
     const n = if (truncate) previous_pow2(@intCast(isize, data_length)) else next_pow2(@intCast(isize, data_length));
 
@@ -86,26 +82,21 @@ pub fn pow2_fft(real: []f64, imag: []f64) !void {
     const sin = @sin(arg);
     wr[0] = 1;
     wi[0] = 0;
-    {
-        var i: usize = 1;
-        while (i < half_n) : (i += 1) {
-            wr[i] = wr[i - 1] * cos - wi[i - 1] * sin;
-            wi[i] = wr[i - 1] * sin + wi[i - 1] * cos;
-        }
+    var i: usize = 1;
+    while (i < half_n) : (i += 1) {
+        wr[i] = wr[i - 1] * cos - wi[i - 1] * sin;
+        wi[i] = wr[i - 1] * sin + wi[i - 1] * cos;
     }
     var m: usize = 2;
     while (m <= n) : (m <<= 1) {
         var half_m = (m >> 1);
-        // std.debug.print("=========={}\n", .{half_m});
         var j: usize = 0;
         while (j < n) : (j += m) {
-            // std.debug.print("----------{}\n", .{j});
-            var i: usize = 0;
+            i = 0;
             while (i < half_m) : (i += 1) {
                 var index1 = i + j;
                 var index2 = index1 + half_m;
                 var t = n / m * i;
-                // std.debug.print("**********{},{},{}\n", .{ index1, index2, t });
                 if (index1 >= n or index2 >= n) continue; //不加此代码报错
                 var tr = wr[t] * real[index2] - wi[t] * imag[index2];
                 var ti = wr[t] * imag[index2] + wi[t] * real[index2];
@@ -140,26 +131,21 @@ pub fn pow2_ifft(real: []f64, imag: []f64) !void {
     const sin = @sin(arg);
     wr[0] = 1;
     wi[0] = 0;
-    {
-        var i: usize = 1;
-        while (i < half_n) : (i += 1) {
-            wr[i] = wr[i - 1] * cos - wi[i - 1] * sin;
-            wi[i] = wr[i - 1] * sin + wi[i - 1] * cos;
-        }
+    var i: usize = 1;
+    while (i < half_n) : (i += 1) {
+        wr[i] = wr[i - 1] * cos - wi[i - 1] * sin;
+        wi[i] = wr[i - 1] * sin + wi[i - 1] * cos;
     }
     var m: usize = 2;
     while (m <= n) : (m <<= 1) {
         var half_m = (m >> 1);
-        // std.debug.print("=========={}\n", .{half_m});
         var j: usize = 0;
         while (j < n) : (j += m) {
-            // std.debug.print("----------{}\n", .{j});
-            var i: usize = 0;
+            i = 0;
             while (i < half_m) : (i += 1) {
                 var index1 = i + j;
                 var index2 = index1 + half_m;
                 var t = n / m * i;
-                // std.debug.print("**********{},{},{}\n", .{ index1, index2, t });
                 if (index1 >= n or index2 >= n) continue; //不加此代码报错
                 var tr = wr[t] * real[index2] - wi[t] * imag[index2];
                 var ti = wr[t] * imag[index2] + wi[t] * real[index2];
@@ -172,7 +158,7 @@ pub fn pow2_ifft(real: []f64, imag: []f64) !void {
             }
         }
     }
-    var i: usize = 0;
+    i = 0;
     while (i < n) : (i += 1) {
         real[i] /= @intToFloat(f64, n);
         imag[i] /= @intToFloat(f64, n);
@@ -217,9 +203,7 @@ pub fn next_pow2(n: isize) isize {
     while (ret < n) {
         ret <<= 1;
     }
-    if (ret <= 0) {
-        return 0x40000000;
-    }
+    if (ret <= 0) return 0x40000000;
     return @intCast(isize, ret);
 }
 

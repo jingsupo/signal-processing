@@ -7,12 +7,9 @@ pub fn flattop(allocator: std.mem.Allocator, n: usize, periodic: bool) ![]f64 {
     var w = std.ArrayList(f64).init(allocator);
     defer w.deinit();
 
-    if (n <= 0) {
-        return w.toOwnedSlice();
-    }
+    if (n <= 0) return w.toOwnedSlice();
     if (n == 1) {
         try w.append(1.0);
-        std.debug.print("\n{any}\n", .{w.items});
         return w.toOwnedSlice();
     }
 
@@ -30,7 +27,6 @@ pub fn flattop(allocator: std.mem.Allocator, n: usize, periodic: bool) ![]f64 {
             a3 * @cos(@intToFloat(f64, 3 * i) * para) +
             a4 * @cos(@intToFloat(f64, 4 * i) * para));
     }
-    std.debug.print("\n{any}\n", .{w.items});
     return w.toOwnedSlice();
 }
 
@@ -39,12 +35,9 @@ pub fn hamming(allocator: std.mem.Allocator, n: usize, periodic: bool) ![]f64 {
     var w = std.ArrayList(f64).init(allocator);
     defer w.deinit();
 
-    if (n <= 0) {
-        return w.toOwnedSlice();
-    }
+    if (n <= 0) return w.toOwnedSlice();
     if (n == 1) {
         try w.append(1.0);
-        std.debug.print("\n{any}\n", .{w.items});
         return w.toOwnedSlice();
     }
 
@@ -53,7 +46,6 @@ pub fn hamming(allocator: std.mem.Allocator, n: usize, periodic: bool) ![]f64 {
     while (i < n) : (i += 1) {
         try w.append(0.54 - 0.46 * @cos(@intToFloat(f64, i) * para));
     }
-    std.debug.print("\n{any}\n", .{w.items});
     return w.toOwnedSlice();
 }
 
@@ -62,12 +54,9 @@ pub fn hann(allocator: std.mem.Allocator, n: usize, periodic: bool) ![]f64 {
     var w = std.ArrayList(f64).init(allocator);
     defer w.deinit();
 
-    if (n <= 0) {
-        return w.toOwnedSlice();
-    }
+    if (n <= 0) return w.toOwnedSlice();
     if (n == 1) {
         try w.append(1.0);
-        std.debug.print("\n{any}\n", .{w.items});
         return w.toOwnedSlice();
     }
 
@@ -76,7 +65,6 @@ pub fn hann(allocator: std.mem.Allocator, n: usize, periodic: bool) ![]f64 {
     while (i < n) : (i += 1) {
         try w.append(0.5 - 0.5 * @cos(@intToFloat(f64, i) * para));
     }
-    std.debug.print("\n{any}\n", .{w.items});
     return w.toOwnedSlice();
 }
 
@@ -85,12 +73,9 @@ pub fn blackman(allocator: std.mem.Allocator, n: usize, periodic: bool) ![]f64 {
     var w = std.ArrayList(f64).init(allocator);
     defer w.deinit();
 
-    if (n <= 0) {
-        return w.toOwnedSlice();
-    }
+    if (n <= 0) return w.toOwnedSlice();
     if (n == 1) {
         try w.append(1.0);
-        std.debug.print("\n{any}\n", .{w.items});
         return w.toOwnedSlice();
     }
 
@@ -101,7 +86,6 @@ pub fn blackman(allocator: std.mem.Allocator, n: usize, periodic: bool) ![]f64 {
             0.5 * @cos(@intToFloat(f64, i) * para) +
             0.08 * @cos(@intToFloat(f64, 2 * i) * para));
     }
-    std.debug.print("\n{any}\n", .{w.items});
     return w.toOwnedSlice();
 }
 
@@ -110,12 +94,9 @@ pub fn bartlett(allocator: std.mem.Allocator, n: usize) ![]f64 {
     var w = std.ArrayList(f64).init(allocator);
     defer w.deinit();
 
-    if (n <= 0) {
-        return w.toOwnedSlice();
-    }
+    if (n <= 0) return w.toOwnedSlice();
     if (n == 1) {
         try w.append(1.0);
-        std.debug.print("\n{any}\n", .{w.items});
         return w.toOwnedSlice();
     }
 
@@ -132,7 +113,6 @@ pub fn bartlett(allocator: std.mem.Allocator, n: usize) ![]f64 {
             try w.append(2 - @intToFloat(f64, i * 2) / @intToFloat(f64, n - 1));
         }
     }
-    std.debug.print("\n{any}\n", .{w.items});
     return w.toOwnedSlice();
 }
 
@@ -141,9 +121,7 @@ pub fn triang(allocator: std.mem.Allocator, n: usize) ![]f64 {
     var w = std.ArrayList(f64).init(allocator);
     defer w.deinit();
 
-    if (n <= 0) {
-        return w.toOwnedSlice();
-    }
+    if (n <= 0) return w.toOwnedSlice();
 
     const odd = (n & 1) == 1;
     const half = if (odd) (n + 1) / 2 else n / 2;
@@ -174,7 +152,6 @@ pub fn triang(allocator: std.mem.Allocator, n: usize) ![]f64 {
             }
         }
     }
-    std.debug.print("\n{any}\n", .{w.items});
     return w.toOwnedSlice();
 }
 
@@ -183,12 +160,9 @@ pub fn gaussian(allocator: std.mem.Allocator, n: usize, std_: f64) ![]f64 {
     var w = std.ArrayList(f64).init(allocator);
     defer w.deinit();
 
-    if (n <= 0) {
-        return w.toOwnedSlice();
-    }
+    if (n <= 0) return w.toOwnedSlice();
     if (n == 1) {
         try w.append(1.0);
-        std.debug.print("\n{any}\n", .{w.items});
         return w.toOwnedSlice();
     }
 
@@ -198,7 +172,6 @@ pub fn gaussian(allocator: std.mem.Allocator, n: usize, std_: f64) ![]f64 {
     while (i < n) : (i += 1) {
         try w.append(@exp(-0.5 * ((@intToFloat(f64, i) - half) * (@intToFloat(f64, i) - half) / sig2)));
     }
-    std.debug.print("\n{any}\n", .{w.items});
     return w.toOwnedSlice();
 }
 
@@ -214,15 +187,13 @@ pub fn kaiser(allocator: std.mem.Allocator, n: usize, beta: f64) ![]f64 {
         const para = beta * @sqrt(1 - x * x);
         try w.append(first_modified_Bessel(0, para) / bes);
     }
-    std.debug.print("\n{any}\n", .{w.items});
     return w.toOwnedSlice();
 }
 
 ///第一类修正贝塞尔函数
 fn first_modified_Bessel(n_: isize, x: f64) f64 {
     var n = n_;
-    if (n < 0)
-        n = -n;
+    if (n < 0) n = -n;
 
     var p: f64 = 0;
     var q: f64 = 0;
@@ -251,8 +222,7 @@ fn first_modified_Bessel(n_: isize, x: f64) f64 {
         }
     }
 
-    if (n == 0)
-        return p;
+    if (n == 0) return p;
 
     q = p;
     if (t < 3.75) {
@@ -273,14 +243,11 @@ fn first_modified_Bessel(n_: isize, x: f64) f64 {
         p *= @exp(t) / @sqrt(t);
     }
 
-    if (x < 0)
-        p = -p;
+    if (x < 0) p = -p;
 
-    if (n == 1)
-        return p;
+    if (n == 1) return p;
 
-    if (x == 0)
-        return 0;
+    if (x == 0) return 0;
 
     const z = 2.0 / t;
     var bt: f64 = 0;
@@ -301,12 +268,10 @@ fn first_modified_Bessel(n_: isize, x: f64) f64 {
             b0 *= powMinus;
             b1 *= powMinus;
         }
-        if (i == n)
-            bt = b0;
+        if (i == n) bt = b0;
     }
     p = bt * q / b1;
-    if ((x < 0) and ((n & 1) == 1))
-        p = -p;
+    if ((x < 0) and ((n & 1) == 1)) p = -p;
     return p;
 }
 
